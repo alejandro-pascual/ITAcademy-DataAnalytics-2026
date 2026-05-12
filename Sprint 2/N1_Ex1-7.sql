@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS transaction (
 
 -- Ex 2
 
--- Ex 2.1 - Llistat dels països que estan generant vendes.
+-- Ex 2.1
 
 SELECT DISTINCT country AS paises_generando_ventas
 FROM company
@@ -41,7 +41,7 @@ JOIN transaction
 WHERE declined = 0
 ;
 
--- Ex 2.2 - Des de quants països es generen les vendes.
+-- Ex 2.2
 
 SELECT COUNT(DISTINCT country) AS recuento_paises_generando_ventas
 FROM company
@@ -50,7 +50,7 @@ JOIN transaction
 WHERE declined = 0
 ;
 
--- Ex 2.3 - Identifica la companyia amb la mitjana més gran de vendes.
+-- Ex 2.3
 
 SELECT company.*, AVG(amount) AS media_ventas
 FROM company
@@ -65,7 +65,7 @@ LIMIT 1
 
 -- Ex 3
 
--- Ex 3.1 - Mostra totes les transaccions realitzades per empreses d'Alemanya.
+-- Ex 3.1
 
 SELECT transaction.*
 FROM transaction
@@ -76,7 +76,7 @@ WHERE declined = 0 AND EXISTS (
 )
 ;
 
--- Ex 3.2 - Llista les empreses que han realitzat transaccions per un amount superior a la mitjana de totes les transaccions.
+-- Ex 3.2
 
 SELECT company_name
 FROM company
@@ -91,7 +91,7 @@ WHERE EXISTS (
 )
 ;
 
--- Ex 3.3 - Eliminaran del sistema les empreses que no tenen transaccions registrades, entrega el llistat d'aquestes empreses.
+-- Ex 3.3
 
 SELECT company.*
 FROM company
