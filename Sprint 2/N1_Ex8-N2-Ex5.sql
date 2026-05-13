@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS companies (
 	country VARCHAR(100),
 	website VARCHAR(255)
 );
-
+	
 CREATE TABLE IF NOT EXISTS credit_cards (
 	id VARCHAR(255) PRIMARY KEY,
     user_id VARCHAR(15) REFERENCES users(id),
@@ -58,37 +58,35 @@ SHOW VARIABLES LIKE 'secure_file_priv';
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/N1.Ex.8__ companies.csv'
 INTO TABLE companies
 	FIELDS TERMINATED BY ','
-    LINES TERMINATED BY '\n'
+    LINES TERMINATED BY '\r\n'
 	IGNORE 1 LINES;
     
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/N1.Ex.8__ credit_cards.csv'
 INTO TABLE credit_cards
 	FIELDS TERMINATED BY ','
-    LINES TERMINATED BY '\n'
+    LINES TERMINATED BY '\r\n'
 	IGNORE 1 LINES;
     
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/N1.Ex.8__ european_users.csv'
 INTO TABLE users
 	FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
-    LINES TERMINATED BY '\n'
+    LINES TERMINATED BY '\r\n'
 	IGNORE 1 LINES;
 
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/N1.Ex.8__ american_users.csv'
 INTO TABLE users
-	FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
-    LINES TERMINATED BY '\n'
+	FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+    LINES TERMINATED BY '\r\n'
 	IGNORE 1 LINES;
-
+    
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/N1.Ex.8__ transactions.csv'
 INTO TABLE transactions
 	FIELDS TERMINATED BY ';'
-    LINES TERMINATED BY '\n'
+    LINES TERMINATED BY '\r\n'
 	IGNORE 1 LINES;
 
--- Ex 9
 
-SELECT users.* FROM users;
-SELECT * FROM transactions;
+-- Ex 9
 
 SELECT *
 FROM users
@@ -102,7 +100,7 @@ WHERE EXISTS (
 
 -- Ex 10
 
-SELECT iban, AVG(amount) AS cantidad_media
+SELECT iban, ROUND(AVG(amount),2) AS cantidad_media
 FROM transactions
 JOIN credit_cards
 	ON card_id = credit_cards.id
@@ -171,24 +169,3 @@ JOIN transactions
 GROUP BY company_id
 ORDER BY media_compra DESC
 ;
-
-
--- N3
-
--- Ex 1
-
-CREATE TABLE IF NOT EXISTS credit_cards_status (
-	credit_card_id VARCHAR(15) UNIQUE,
-    status_active TINYINT,
-    FOREIGN KEY (credit_card_id) REFERENCES credit_cards(id)
-);
-
-INSERT INTO credit_cards_status (credit_card_id)
-SELECT credit_cards.id
-FROM credit_cards
-;
-
-
-
-
-SELECT * FROM credit_cards_status;

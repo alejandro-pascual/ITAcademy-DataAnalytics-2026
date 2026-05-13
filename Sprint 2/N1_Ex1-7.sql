@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS credit_card (
 	cvv INT,
 	expiring_date VARCHAR(15)
 );
-
+ALTER TABLE transaction DROP CONSTRAINT credit_card_transaction;
 ALTER TABLE transaction ADD CONSTRAINT credit_card_transaction
 FOREIGN KEY (credit_card_id) REFERENCES credit_card(id);
 
@@ -124,8 +124,8 @@ ALTER TABLE credit_card
 MODIFY expiring_date DATE;
 
     
-    SELECT expiring_date AS fecha
-    FROM credit_card;
+SELECT expiring_date AS fecha
+FROM credit_card;
     
     
 -- Ex 5
@@ -134,6 +134,8 @@ UPDATE credit_card SET
 	iban = 'TR323456312213576817699999'
 WHERE id = 'CcU-2938'
 ;
+
+SELECT * FROM credit_card WHERE id = 'CcU-2938';
 
 
 -- Ex 6
