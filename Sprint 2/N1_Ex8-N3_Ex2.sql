@@ -12,20 +12,6 @@ CREATE TABLE IF NOT EXISTS companies (
 	website VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS transactions (
-	id VARCHAR(255) PRIMARY KEY,
-	card_id VARCHAR(15) REFERENCES credit_cards(id),
-	business_id VARCHAR(20), 
-	timestamp TIMESTAMP,
-	amount DECIMAL(10, 2),
-	declined BOOLEAN,
-    product_ids VARCHAR(255),
-	user_id INT REFERENCES users(id),
-	lat FLOAT,
-	longitude FLOAT,
-	FOREIGN KEY (business_id) REFERENCES companies(company_id) 
-);
-
 CREATE TABLE IF NOT EXISTS credit_cards (
 	id VARCHAR(255) PRIMARY KEY,
     user_id VARCHAR(15) REFERENCES users(id),
@@ -51,17 +37,27 @@ CREATE TABLE IF NOT EXISTS users (
     address VARCHAR(100)
 );
 
+CREATE TABLE IF NOT EXISTS transactions (
+	id VARCHAR(255) PRIMARY KEY,
+	card_id VARCHAR(15),
+	business_id VARCHAR(20), 
+	timestamp TIMESTAMP,
+	amount DECIMAL(10, 2),
+	declined BOOLEAN,
+    product_ids VARCHAR(255),
+	user_id INT REFERENCES users(id),
+	lat FLOAT,
+	longitude FLOAT,
+	FOREIGN KEY (business_id) REFERENCES companies(company_id),
+    FOREIGN KEY (card_id) REFERENCES credit_cards(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
 SHOW VARIABLES LIKE 'secure_file_priv';
 
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/N1.Ex.8__ companies.csv'
 INTO TABLE companies
 	FIELDS TERMINATED BY ','
-    LINES TERMINATED BY '\n'
-	IGNORE 1 LINES;
-    
-LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/N1.Ex.8__ transactions.csv'
-INTO TABLE transactions
-	FIELDS TERMINATED BY ';'
     LINES TERMINATED BY '\n'
 	IGNORE 1 LINES;
     
@@ -83,19 +79,26 @@ INTO TABLE users
     LINES TERMINATED BY '\n'
 	IGNORE 1 LINES;
 
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/N1.Ex.8__ transactions.csv'
+INTO TABLE transactions
+	FIELDS TERMINATED BY ';'
+    LINES TERMINATED BY '\n'
+	IGNORE 1 LINES;
 
 -- Ex 9
 
-SELECT users.*
+SELECT users.* FROM users;
+SELECT * FROM transactions;
+
+SELECT *
 FROM users
 WHERE EXISTS (
-	SELECT user_id
+	SELECT transactions.user_id
     FROM transactions
-    GROUP BY user_id
-	HAVING COUNT(user_id) > 80
-)
-;
-
+    WHERE user_id = users.id AND declined = 0
+    GROUP BY transactions.user_id
+    HAVING COUNT(*) > 80
+);
 
 -- Ex 10
 
@@ -106,7 +109,7 @@ JOIN credit_cards
 JOIN companies
 	ON business_id = company_id
 WHERE company_name LIKE 'Donec Ltd'
-GROUP BY credit_cards.id
+GROUP BY credit_cards.iban
 ;
 
 
@@ -120,7 +123,7 @@ JOIN companies
 	ON business_id = company_id
 WHERE company_name LIKE 'Donec Ltd'
 GROUP BY DATE(timestamp)
-ORDER BY SUM(amount) DESC
+ORDER BY ingresos DESC
 LIMIT 5
 ;
 
@@ -160,9 +163,8 @@ WHERE id LIKE '000447FE-B650-4DCF-85DE-C7ED0EE1CAAD'
 
 
 -- Ex 5
-DROP VIEW VistaMarketing;
-CREATE VIEW VistaMarketing AS
-SELECT company_name, phone, country, AVG(amount) AS media_compra
+CREATE OR REPLACE VIEW VistaMarketing AS
+SELECT company_name, phone, country, ROUND(AVG(amount), 2) AS media_compra
 FROM companies
 JOIN transactions
 	ON company_id = business_id

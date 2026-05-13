@@ -25,14 +25,14 @@ CREATE TABLE IF NOT EXISTS transaction (
 	timestamp TIMESTAMP,
 	amount DECIMAL(10, 2),
 	declined BOOLEAN,
-	FOREIGN KEY (company_id) REFERENCES company(id) 
+	FOREIGN KEY (company_id) REFERENCES company(id)
 );
 
 -- Insertar datos de 'N1-Ex.1__dades_introduir.sql'
 
 -- Ex 2
 
--- Ex 2.1
+-- Ex 2.1 - Llistat dels països que estan generant vendes.
 
 SELECT DISTINCT country AS paises_generando_ventas
 FROM company
@@ -41,7 +41,7 @@ JOIN transaction
 WHERE declined = 0
 ;
 
--- Ex 2.2
+-- Ex 2.2 - Des de quants països es generen les vendes.
 
 SELECT COUNT(DISTINCT country) AS recuento_paises_generando_ventas
 FROM company
@@ -50,7 +50,7 @@ JOIN transaction
 WHERE declined = 0
 ;
 
--- Ex 2.3
+-- Ex 2.3 - Identifica la companyia amb la mitjana més gran de vendes.
 
 SELECT company.*, AVG(amount) AS media_ventas
 FROM company
@@ -65,7 +65,7 @@ LIMIT 1
 
 -- Ex 3
 
--- Ex 3.1
+-- Ex 3.1 - Mostra totes les transaccions realitzades per empreses d'Alemanya.
 
 SELECT transaction.*
 FROM transaction
@@ -76,7 +76,7 @@ WHERE declined = 0 AND EXISTS (
 )
 ;
 
--- Ex 3.2
+-- Ex 3.2 - Llista les empreses que han realitzat transaccions per un amount superior a la mitjana de totes les transaccions.
 
 SELECT company_name
 FROM company
@@ -87,11 +87,10 @@ WHERE EXISTS (
 		SELECT AVG(amount)
         FROM transaction
     )
-	GROUP BY company_id
 )
 ;
 
--- Ex 3.3
+-- Ex 3.3 - Eliminaran del sistema les empreses que no tenen transaccions registrades, entrega el llistat d'aquestes empreses.
 
 SELECT company.*
 FROM company
@@ -136,7 +135,7 @@ VALUES ('CcU-9999');
 INSERT INTO company (id)
 VALUES ('b-9999');
 
-DELETE FROM transaction WHERE id = '108B1D1D-5B23-A76C-55EF-C568E49A99DD';
+-- DELETE FROM transaction WHERE id = '108B1D1D-5B23-A76C-55EF-C568E49A99DD';
 
 INSERT INTO transaction (id, credit_card_id, company_id, user_id, lat, longitude, timestamp, amount, declined)
 VALUES ('108B1D1D-5B23-A76C-55EF-C568E49A99DD', 'CcU-9999', 'b-9999', 9999, 829.999, -117.999, TIMESTAMP(NOW()), 111.11, 0);
