@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS company (
 -- Creamos la tabla transaction
 CREATE TABLE IF NOT EXISTS transaction (
 	id VARCHAR(255) PRIMARY KEY,
-	credit_card_id VARCHAR(15) REFERENCES credit_card(id),
+	credit_card_id VARCHAR(15),
 	company_id VARCHAR(20), 
 	user_id INT REFERENCES user(id),
 	lat FLOAT,
@@ -52,7 +52,7 @@ WHERE declined = 0
 
 -- Ex 2.3 - Identifica la companyia amb la mitjana més gran de vendes.
 
-SELECT company.*, AVG(amount) AS media_ventas
+SELECT company.*, ROUND(AVG(amount),2) AS media_ventas
 FROM company
 JOIN transaction
 	ON company.id = company_id
@@ -109,13 +109,22 @@ CREATE TABLE IF NOT EXISTS credit_card (
 	pan VARCHAR(50),
 	pin INT,
 	cvv INT,
-	expiring_date CHAR(8)
+	expiring_date VARCHAR(15)
 );
+
+ALTER TABLE transaction ADD CONSTRAINT credit_card_transaction
+FOREIGN KEY (credit_card_id) REFERENCES credit_card(id);
 
 -- Insertar datos de 'N1-Ex.4__datos_introducir_credit.sql'
 
+UPDATE credit_card
+SET expiring_date = STR_TO_DATE(expiring_date, '%m/%d/%y');
+
+ALTER TABLE credit_card
+MODIFY expiring_date DATE;
+
     
-    SELECT STR_TO_DATE(expiring_date, '%m/%d/%y') AS fecha
+    SELECT expiring_date AS fecha
     FROM credit_card;
     
     
