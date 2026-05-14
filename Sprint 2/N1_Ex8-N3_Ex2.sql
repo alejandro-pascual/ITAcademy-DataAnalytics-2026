@@ -4,7 +4,7 @@ CREATE DATABASE IF NOT EXISTS Ex8;
 USE Ex8;
 
 CREATE TABLE IF NOT EXISTS companies (
-	company_id VARCHAR(15) PRIMARY KEY,
+	company_id VARCHAR(15) PRIMARY KEY UNIQUE NOT NULL,
 	company_name VARCHAR(255),
 	phone VARCHAR(15),
 	email VARCHAR(100),
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS companies (
 );
 
 CREATE TABLE IF NOT EXISTS credit_cards (
-	id VARCHAR(255) PRIMARY KEY,
+	id VARCHAR(255) PRIMARY KEY UNIQUE NOT NULL,
     user_id VARCHAR(15) REFERENCES users(id),
     iban VARCHAR(50),
     pan VARCHAR(50),
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS credit_cards (
 );
 
 CREATE TABLE IF NOT EXISTS users (
-	id INT PRIMARY KEY,
+	id INT PRIMARY KEY UNIQUE,
     name VARCHAR(50),
     surname VARCHAR(50),
     phone VARCHAR(20),
@@ -38,9 +38,9 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS transactions (
-	id VARCHAR(255) PRIMARY KEY,
-	card_id VARCHAR(15),
-	business_id VARCHAR(20), 
+	id VARCHAR(255) PRIMARY KEY UNIQUE,
+	card_id VARCHAR(15) NOT NULL,
+	business_id VARCHAR(20) NOT NULL,
 	timestamp TIMESTAMP,
 	amount DECIMAL(10, 2),
 	declined BOOLEAN,
@@ -178,7 +178,7 @@ ORDER BY media_compra DESC
 -- Ex 1
 
 CREATE TABLE IF NOT EXISTS credit_cards_status (
-	credit_card_id VARCHAR(15) UNIQUE,
+	credit_card_id VARCHAR(15) PRIMARY KEY UNIQUE,
     status_active TINYINT,
     FOREIGN KEY (credit_card_id) REFERENCES credit_cards(id)
 );
