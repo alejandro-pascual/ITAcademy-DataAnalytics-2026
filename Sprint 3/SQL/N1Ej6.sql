@@ -1,0 +1,1 @@
+SELECT company_name, country, timestamp

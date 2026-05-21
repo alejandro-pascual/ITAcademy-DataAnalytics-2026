@@ -7,6 +7,12 @@ Todos los archivos necesarios como datos a importar se pueden encontrar también
 **Finalizado.**
 
 ## Sprint 2
-- **Nivel 1:** Finalizado; documentación pendiente.
-- **Nivel 2:** Finalizado; documentación pendiente.
-- **Nivel 3:** En curso...
+- **Nivel 1: Finalizado.**
+- **Nivel 2: Finalizado.**
+- **Nivel 3: Pendiente.**
+
+## Sprint 3
+- **Nivel 1: Finalizado.**
+- **Nivel 2: Finalizado.**
+- **Nivel 3:** Pendiente.
+
