@@ -16,3 +16,7 @@ Todos los archivos necesarios como datos a importar se pueden encontrar también
 - **Nivel 2: Finalizado.**
 - **Nivel 3: Pendiente.**
 
+## Sprint 4
+- **Nivel 1: Finalizado.**
+- **Nivel 2: Finalizado.**
+- **Nivel 3: Pendiente.**
